@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Matejital Sınıfı - Matematik Oyunları 🚀</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #0f1016 0%, #1e272e 100%);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px; overflow-x: hidden;
+        }
+
+        /* Profil ve Başlık Alanı */
+        .header {
+            text-align: center; margin-top: 20px; margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+        .profile-img {
+            width: 110px; height: 110px; border-radius: 50%;
+            border: 4px solid #1dd1a1; box-shadow: 0 0 20px rgba(29, 209, 161, 0.5);
+            margin-bottom: 15px; background: white; padding: 5px;
+        }
+        .title { color: #ffffff; font-size: 2.2rem; font-weight: 700; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .subtitle { color: #00d2d3; font-size: 1.1rem; font-weight: 500; margin-bottom: 15px; }
+        .instagram-link {
+            text-decoration: none; color: #0f1016; font-weight: 700; font-size: 0.9rem;
+            background: #ff9ff3; padding: 6px 15px; border-radius: 20px; 
+            box-shadow: 0 0 15px rgba(255, 159, 243, 0.5); display: inline-block;
+            transition: transform 0.2s;
+        }
+        .instagram-link:active { transform: scale(0.95); }
+
+        /* Kategori Başlıkları */
+        .category-title {
+            width: 100%; max-width: 600px; color: #ff9ff3;
+            font-size: 1.5rem; font-weight: 700; margin: 30px 0 15px 0;
+            border-bottom: 2px dashed rgba(255, 159, 243, 0.3); padding-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        /* Oyun Kartları Menüsü */
+        .games-grid {
+            display: grid; grid-template-columns: 1fr; gap: 15px;
+            width: 100%; max-width: 600px; padding-bottom: 20px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 15px 20px;
+            display: flex; align-items: center; text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(10px);
+        }
+        .game-card:hover, .game-card:active { 
+            transform: translateY(-5px); 
+            background: rgba(255, 255, 255, 0.1); 
+        }
+
+        .game-icon {
+            font-size: 2.2rem; margin-right: 20px;
+            background: rgba(255,255,255,0.05); min-width: 60px; height: 60px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 15px;
+        }
+
+        .game-info { flex: 1; }
+        .game-title { color: #ffffff; font-size: 1.15rem; font-weight: 700; margin-bottom: 5px; line-height: 1.2; }
+        .game-desc { color: #a4b0be; font-size: 0.85rem; font-weight: 400; line-height: 1.4; }
+
+        /* Otomatik Döngüsel Neon Kart Renkleri */
+        .game-card:nth-child(5n+1) .game-icon { box-shadow: 0 0 15px rgba(29, 209, 161, 0.3); border: 2px solid #1dd1a1; }
+        .game-card:nth-child(5n+1) .game-title { color: #1dd1a1; }
+        .game-card:nth-child(5n+1):hover { border-color: #1dd1a1; box-shadow: 0 10px 20px rgba(29, 209, 161, 0.15); }
+
+        .game-card:nth-child(5n+2) .game-icon { box-shadow: 0 0 15px rgba(255, 159, 243, 0.3); border: 2px solid #ff9ff3; }
+        .game-card:nth-child(5n+2) .game-title { color: #ff9ff3; }
+        .game-card:nth-child(5n+2):hover { border-color: #ff9ff3; box-shadow: 0 10px 20px rgba(255, 159, 243, 0.15); }
+
+        .game-card:nth-child(5n+3) .game-icon { box-shadow: 0 0 15px rgba(0, 210, 211, 0.3); border: 2px solid #00d2d3; }
+        .game-card:nth-child(5n+3) .game-title { color: #00d2d3; }
+        .game-card:nth-child(5n+3):hover { border-color: #00d2d3; box-shadow: 0 10px 20px rgba(0, 210, 211, 0.15); }
+
+        .game-card:nth-child(5n+4) .game-icon { box-shadow: 0 0 15px rgba(254, 202, 87, 0.3); border: 2px solid #feca57; }
+        .game-card:nth-child(5n+4) .game-title { color: #feca57; }
+        .game-card:nth-child(5n+4):hover { border-color: #feca57; box-shadow: 0 10px 20px rgba(254, 202, 87, 0.15); }
+
+        .game-card:nth-child(5n+5) .game-icon { box-shadow: 0 0 15px rgba(255, 107, 107, 0.3); border: 2px solid #ff6b6b; }
+        .game-card:nth-child(5n+5) .game-title { color: #ff6b6b; }
+        .game-card:nth-child(5n+5):hover { border-color: #ff6b6b; box-shadow: 0 10px 20px rgba(255, 107, 107, 0.15); }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Arkaplan Yıldız Efekti */
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+    </style>
+</head>
+<body>
+
+    <canvas class="stars" id="starsCanvas"></canvas>
+
+    <div class="header">
+        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bekir&backgroundColor=1dd1a1" alt="Profil" class="profile-img">
+        <h1 class="title">Matejital Sınıfı</h1>
+        <p class="subtitle">İnteraktif Matematik Materyalleri</p>
+        <a href="https://instagram.com/matejital_mt25" target="_blank" class="instagram-link">@matejital_mt25</a>
+    </div>
+
+    <!-- KATEGORİ: GEOMETRİ (Açılar ve Doğrular) -->
+    <h2 class="category-title">📐 Açılar ve Doğrular</h2>
+    <div class="games-grid">
+        <a href="https://bekrrmatmt25.my.canva.site/sihirli-a-l-er-web-sitesi" target="_blank" class="game-card">
+            <div class="game-icon">🎯</div>
+            <div class="game-info">
+                <div class="game-title">Açıölçer Yerleştirme Oyunu</div>
+                <div class="game-desc">Açıölçeri doğru hizala ve milimetrik ölçümleri yap.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/kendi-ac-olcer-m-yap-yorum" target="_blank" class="game-card">
+            <div class="game-icon">🍕</div>
+            <div class="game-info">
+                <div class="game-title">Kendi Açıölçerimi Yapıyorum</div>
+                <div class="game-desc">5. Sınıf (S. 39) Daireyi katla, kendi aracını üret.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/dogruya-d-s-ndak-noktadan-d-kme-c-zmek" target="_blank" class="game-card">
+            <div class="game-icon">📏</div>
+            <div class="game-info">
+                <div class="game-title">Doğruya Dışından Dikme Çizme</div>
+                <div class="game-desc">Etkileşimli gönye ile dikmeler indir.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/ac-ces-tler-dar-d-k-gen-s-tam" target="_blank" class="game-card">
+            <div class="game-icon">🎡</div>
+            <div class="game-info">
+                <div class="game-title">Cıvıl Cıvıl Açı Çarkı</div>
+                <div class="game-desc">Dar, dik, geniş, doğru ve tam açıları çarkla keşfet.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/tumler-butunler-komsutumler-komsubutunler/" target="_blank" class="game-card">
+            <div class="game-icon">🧩</div>
+            <div class="game-info">
+                <div class="game-title">Açı Çeşitleri (Tümler, Bütünler)</div>
+                <div class="game-desc">Tümler, bütünler ve komşu açıları kavra.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt2507.my.canva.site/aci-cesitleri" target="_blank" class="game-card">
+            <div class="game-icon">📐</div>
+            <div class="game-info">
+                <div class="game-title">Açı Çeşitleri Temel</div>
+                <div class="game-desc">Dar, dik, geniş, doğru ve tam açı.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/iki-paralel-dogrunun-bir-kesenle-yapt-g-ac-lar" target="_blank" class="game-card">
+            <div class="game-icon">🛤️</div>
+            <div class="game-info">
+                <div class="game-title">Paralel Doğrular ve Kesen</div>
+                <div class="game-desc">Ters, komşu ve eş açıları interaktif öğren.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt2507.my.canva.site/ikiser-kesisen-dogru" target="_blank" class="game-card">
+            <div class="game-icon">✖️</div>
+            <div class="game-info">
+                <div class="game-title">3 Doğrunun Kesişmesi</div>
+                <div class="game-desc">Üç doğrunun ikişer kesişmesiyle oluşan açılar.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/ayni-duzlemde-iki-dogru/" target="_blank" class="game-card">
+            <div class="game-icon">🛣️</div>
+            <div class="game-info">
+                <div class="game-title">2 Doğrunun Yolculuğu</div>
+                <div class="game-desc">Aynı düzlemdeki iki doğrunun ilişkisi.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt2507.my.canva.site/ayniduzlemdeucdogrunundurumlari" target="_blank" class="game-card">
+            <div class="game-icon">🛣️</div>
+            <div class="game-info">
+                <div class="game-title">3 Doğrunun Durumları</div>
+                <div class="game-desc">Aynı düzlemdeki üç doğrunun durumlarını incele.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/temel-geometrik-sekiller" target="_blank" class="game-card">
+            <div class="game-icon">📍</div>
+            <div class="game-info">
+                <div class="game-title">Temel Geometrik Şekiller</div>
+                <div class="game-desc">Nokta, doğru, doğru parçası ve ışın.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/oteleme-ve-yansima" target="_blank" class="game-card">
+            <div class="game-icon">🪞</div>
+            <div class="game-info">
+                <div class="game-title">Dönüşüm Geometrisi</div>
+                <div class="game-desc">Öteleme ve yansıma hareketlerini kavra.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: ÇOKGENLER VE ÜÇGENLER -->
+    <h2 class="category-title">🔺 Çokgenler ve Üçgenler</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/cemberden-ucgen-elde-etme" target="_blank" class="game-card">
+            <div class="game-icon">⭕</div>
+            <div class="game-info">
+                <div class="game-title">Çemberlerden Üçgen İnşası</div>
+                <div class="game-desc">Çemberler yardımıyla kusursuz üçgenler oluştur.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/acilarina-gire-ucgenler" target="_blank" class="game-card">
+            <div class="game-icon">📐</div>
+            <div class="game-info">
+                <div class="game-title">Açılarına Göre Üçgenler</div>
+                <div class="game-desc">Üçgenleri açı tiplerine göre sınıflandır.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/ucgende-yardim-i-elemanlar" target="_blank" class="game-card">
+            <div class="game-icon">📏</div>
+            <div class="game-info">
+                <div class="game-title">Üçgende Yardımcı Elemanlar</div>
+                <div class="game-desc">Yükseklik, açıortay ve kenarortayı öğren.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/ucgen-cizim-sartlari" target="_blank" class="game-card">
+            <div class="game-icon">🛠️</div>
+            <div class="game-info">
+                <div class="game-title">Üçgen Çizimi Şartları</div>
+                <div class="game-desc">Cetvel, pergel ve açıölçer ile üçgen inşası.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/eslikvebenzerlik/" target="_blank" class="game-card">
+            <div class="game-icon">🔍</div>
+            <div class="game-info">
+                <div class="game-title">Üçgende Eşlik ve Benzerlik</div>
+                <div class="game-desc">Şekiller arası benzerlik oranlarını keşfet.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt2507.my.canva.site/cokgenlerin-elemanlari" target="_blank" class="game-card">
+            <div class="game-icon">⬟</div>
+            <div class="game-info">
+                <div class="game-title">Çokgenlerin Elemanları</div>
+                <div class="game-desc">Köşe, kenar, köşegen ve açı kavramları.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/dikdortgen-cevre-ve-alan/" target="_blank" class="game-card">
+            <div class="game-icon">🟩</div>
+            <div class="game-info">
+                <div class="game-title">Dikdörtgen Çevre ve Alanı</div>
+                <div class="game-desc">Oyunlaştırılmış alan ve çevre hesaplama.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/dortgenler-ve-ozellikleri-tumevarim" target="_blank" class="game-card">
+            <div class="game-icon">📈</div>
+            <div class="game-info">
+                <div class="game-title">Dörtgenlerin Özellikleri (Tümevarım)</div>
+                <div class="game-desc">Parçalardan bütüne dörtgen analizi.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/dortgen-ve-ozellikleri-tumdengelim/" target="_blank" class="game-card">
+            <div class="game-icon">📉</div>
+            <div class="game-info">
+                <div class="game-title">Dörtgenlerin Özellikleri (Tümdengelim)</div>
+                <div class="game-desc">Bütünden parçalara dörtgen analizi.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/dortgenler-kavram-haritasi" target="_blank" class="game-card">
+            <div class="game-icon">🗺️</div>
+            <div class="game-info">
+                <div class="game-title">Dörtgen Çeşitleri Kavram Haritası</div>
+                <div class="game-desc">Dörtgenler arası hiyerarşik ilişkiler.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/dortgenler-genel-cikarimlar" target="_blank" class="game-card">
+            <div class="game-icon">📝</div>
+            <div class="game-info">
+                <div class="game-title">Dörtgenler Genel Çıkarımlar</div>
+                <div class="game-desc">Dörtgen özellikleri genel tekrarı.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/kosegenlerden-dortgenlere" target="_blank" class="game-card">
+            <div class="game-icon">✂️</div>
+            <div class="game-info">
+                <div class="game-title">Köşegenlerden Dörtgenlere</div>
+                <div class="game-desc">Köşegen özelliklerine göre dörtgen inşası.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: 3 BOYUTLU CİSİMLER -->
+    <h2 class="category-title">🧊 3 Boyutlu Cisimler</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/prizmalarin-elemanlar-ve-a-inimlari" target="_blank" class="game-card">
+            <div class="game-icon">📦</div>
+            <div class="game-info">
+                <div class="game-title">Prizmaların Elemanları</div>
+                <div class="game-desc">Prizmaların açınımları ve özellikleri.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/piramidin-elemanlar-ve-acinimi" target="_blank" class="game-card">
+            <div class="game-icon">🔺</div>
+            <div class="game-info">
+                <div class="game-title">Piramit ve Açınımı</div>
+                <div class="game-desc">Piramidin elemanları ve katlama simülasyonu.</div>
+            </div>
+        </a>
+        <a href="https://sites.google.com/view/uc-boyutlu-sekiller/ana-sayfa_1" target="_blank" class="game-card">
+            <div class="game-icon">🧊</div>
+            <div class="game-info">
+                <div class="game-title">Prizma, Piramit, Koni, Silindir</div>
+                <div class="game-desc">3 Boyutlu şekiller ana sayfa portalı.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: SAYILAR VE İŞLEMLER -->
+    <h2 class="category-title">✖️ Sayılar ve İşlemler</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/asal-dikd-rtgen-av-ders-kitab-41" target="_blank" class="game-card">
+            <div class="game-icon">🟪</div>
+            <div class="game-info">
+                <div class="game-title">Asal Dikdörtgen Avı</div>
+                <div class="game-desc">6. Sınıf (S. 41) Sadece alanı asal olanları yakala.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/asal-mi-degil-mi/" target="_blank" class="game-card">
+            <div class="game-icon">🕵️‍♂️</div>
+            <div class="game-info">
+                <div class="game-title">Asal Mı, Değil Mi? (Evet/Hayır)</div>
+                <div class="game-desc">Karşına çıkan sayıların asal olup olmadığına karar ver.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/6-s-n-f-asal-say-lar-erathosthenes-kalburu" target="_blank" class="game-card">
+            <div class="game-icon">🔢</div>
+            <div class="game-info">
+                <div class="game-title">Eratosthenes Kalburu</div>
+                <div class="game-desc">100'e kadar olan asal sayıları eleyerek bul.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/carpan-ve-bolen-ayn-m" target="_blank" class="game-card">
+            <div class="game-icon">⚖️</div>
+            <div class="game-info">
+                <div class="game-title">Çarpan ve Bölen Aynı Mı?</div>
+                <div class="game-desc">Çarpanlar ve bölenler arasındaki ilişkiyi kur.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/en-kucuk-kat" target="_blank" class="game-card">
+            <div class="game-icon">🔍</div>
+            <div class="game-info">
+                <div class="game-title">En Küçük Kat ve Bölen</div>
+                <div class="game-desc">Sayıların katlarını ve bölenlerini hesapla.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/oyun-kodu-web-yay-n-kopyas" target="_blank" class="game-card">
+            <div class="game-icon">🧱</div>
+            <div class="game-info">
+                <div class="game-title">Taban Blokları (İlkokul)</div>
+                <div class="game-desc">Küçük sayıları bloklarla eğlenceli modelle.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/6-basamakli-sayilar-taban-bloklari" target="_blank" class="game-card">
+            <div class="game-icon">🏢</div>
+            <div class="game-info">
+                <div class="game-title">Büyük Taban Blokları</div>
+                <div class="game-desc">6 basamaklı sayılara kadar blok inşaları yap.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/kesirlerin-farkl-g-sterimleri" target="_blank" class="game-card">
+            <div class="game-icon">🍕</div>
+            <div class="game-info">
+                <div class="game-title">Kesirlerin Farklı Gösterimleri</div>
+                <div class="game-desc">Kesirleri denk halleriyle eşleştir.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: BÖLÜNEBİLME KURALLARI -->
+    <h2 class="category-title">➗ Bölünebilme Kuralları</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/2-5-ve-10-le-kalans-z-boluneb-lme" target="_blank" class="game-card">
+            <div class="game-icon">✌️</div>
+            <div class="game-info">
+                <div class="game-title">2, 5 ve 10 İle Bölünebilme</div>
+                <div class="game-desc">Son basamağa bakarak kalansız bölünmeyi test et.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/3-ve-9-ile-b-l-nebilme" target="_blank" class="game-card">
+            <div class="game-icon">3️⃣</div>
+            <div class="game-info">
+                <div class="game-title">3 ve 9 İle Bölünebilme</div>
+                <div class="game-desc">Rakamları toplamı üzerinden kuralı kavra.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/4-le-boluneb-lme" target="_blank" class="game-card">
+            <div class="game-icon">4️⃣</div>
+            <div class="game-info">
+                <div class="game-title">4 İle Bölünebilme</div>
+                <div class="game-desc">Sayının son iki basamağına odaklan.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/6-ile-tam-b-l-nebilme" target="_blank" class="game-card">
+            <div class="game-icon">6️⃣</div>
+            <div class="game-info">
+                <div class="game-title">6 İle Bölünebilme</div>
+                <div class="game-desc">Hem 2'nin hem 3'ün kurallarını uygula.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: CEBİRSEL İFADELER -->
+    <h2 class="category-title">🧮 Cebirsel İfadeler</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/cebirsel-ifadeler-temel-kavramlar" target="_blank" class="game-card">
+            <div class="game-icon">🔠</div>
+            <div class="game-info">
+                <div class="game-title">Cebirsel Temel Kavramlar</div>
+                <div class="game-desc">Değişken, terim, katsayı ve sabit terim.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/cebirsel-ifadelerle-oyun-tasar-m-kopyas" target="_blank" class="game-card">
+            <div class="game-icon">🗣️</div>
+            <div class="game-info">
+                <div class="game-title">Sözelden Cebire (Bölüm 1)</div>
+                <div class="game-desc">Sözel ifadeleri cebirsel formüllere çevir.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/cebirsel-ifadeler-2-cebirden-s-zele" target="_blank" class="game-card">
+            <div class="game-icon">✍️</div>
+            <div class="game-info">
+                <div class="game-title">Cebirden Sözele (Bölüm 2)</div>
+                <div class="game-desc">Cebirsel formülleri sözel problemlere dönüştür.</div>
+            </div>
+        </a>
+        <a href="https://bekrmatmt25.my.canva.site/cebirsel-ifadelerin-degerini-hesaplamak" target="_blank" class="game-card">
+            <div class="game-icon">🔢</div>
+            <div class="game-info">
+                <div class="game-title">Değerini Hesapla (Bölüm 3)</div>
+                <div class="game-desc">Değişkenlere değer verip sonucu bul.</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- KATEGORİ: DİĞER ETKİNLİKLER -->
+    <h2 class="category-title">📊 Veri ve Diğer</h2>
+    <div class="games-grid">
+        <a href="https://bekrmatmt25.my.canva.site/5-sinif-arastirma-adimlari" target="_blank" class="game-card">
+            <div class="game-icon">📈</div>
+            <div class="game-info">
+                <div class="game-title">Araştırma Adımları</div>
+                <div class="game-desc">5. Sınıf: Veri toplama ve araştırma süreçleri.</div>
+            </div>
+        </a>
+        <a href="https://bdemir1499.github.io/GEOMBALA-KARSILIKLI/" target="_blank" class="game-card">
+            <div class="game-icon">🚀</div>
+            <div class="game-info">
+                <div class="game-title">Geombala Multiplayer</div>
+                <div class="game-desc">Arkadaşlarınla karşılıklı matematiksel mücadele!</div>
+            </div>
+        </a>
+    </div>
+
+    <script>
+        // Arkaplan için hafif yıldız animasyonu
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        for(let i=0; i<80; i++) {
+            stars.push({
+                x: Math.random() * width, y: Math.random() * height,
+                r: Math.random() * 1.5,
+                d: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            stars.forEach(s => {
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+                s.y += s.d;
+                if(s.y > height) s.y = 0;
+            });
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+    </script>
+</body>
+</html>
